@@ -49,7 +49,26 @@ walkforward:
   # Campioni bootstrap per la differenza di Sharpe
   bootstrap_samples: 5000
 
+# ── Immutabilità storico (fingerprint)
+# Controlla il confronto tra il PnL degli ANNI CHIUSI e la baseline salvata
+# in output/fingerprints.json. Tre modalità (valore tra virgolette):
+#   "off"   → controllo DISATTIVATO: nessun confronto, nessun avviso, nessuna
+#             esclusione. Da usare quando ruoti i sistemi o cambi le size: in
+#             quei casi il PnL storico in $ cambia legittimamente e non deve
+#             bloccare il calcolo dei pesi.
+#   "warn"  → il sistema con storico mutato RESTA nel calcolo; la mutazione
+#             compare solo come avviso nel report e la baseline si auto-aggiorna.
+#   "block" → il sistema con storico mutato viene ESCLUSO (quarantena) finché
+#             non lo ri-approvi con `python src/verify.py --approve NomeSistema`.
+# NB: tieni le virgolette — senza, YAML interpreta off/on/yes/no come booleani.
+# Dopo aver riattivato "warn"/"block" a seguito di una rotazione, ricostruisci
+# la baseline una volta con: python src/verify.py [--local DIR] --approve
+fingerprint:
+  mode: "off"
+
 # ── Sanity check sui dati (quarantena automatica)
+# NB: indipendente dal fingerprint sopra. Esclude file CORROTTI (win rate
+# impossibile, troppi duplicati, troppi pochi trade), non i sistemi ruotati.
 sanity:
   # Win rate oltre questa soglia = dati sospetti → quarantena
   max_win_rate: 0.90
