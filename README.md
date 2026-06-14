@@ -22,6 +22,11 @@ sistemi.
 3. **Sanity check con quarantena automatica**: sistemi con win rate > 90%,
    troppe righe duplicate o troppo pochi trade vengono esclusi e segnalati
    nel report con il motivo. File stale → warning.
+   **Controllo immutabilità storico**: confronta il PnL degli anni chiusi con
+   la baseline. Configurabile in `settings.yaml → fingerprint.mode`
+   (`off` / `warn` / `block`). Di default è **`off`**: dopo le rotazioni dei
+   sistemi e i cambi di size il PnL storico cambia legittimamente e non deve
+   bloccare il calcolo (vedi sotto).
 4. **Analisi di allocazione**: vol e statistiche per famiglia, matrice di
    correlazione, contributo alla varianza di portafoglio, persistenza
    vol/Sharpe.
@@ -105,12 +110,29 @@ con lo Strategy Performance Report di MultiCharts:
    `output/fingerprints.json`: è la baseline di immutabilità.
 2. Non coincidono → ri-esporta il sistema dal workspace corretto e ripeti.
 
-Da quel momento **ogni run trimestrale verifica che lo storico non sia
-mutato**: i trade passati non cambiano mai, quindi se il PnL di un anno
-chiuso differisce dalla baseline il sistema va in quarantena automatica
-(file rigenerato da timeframe/workspace/size diversi) e non entra nei pesi.
-Per ri-approvare un sistema dopo una correzione voluta:
-`python src/verify.py --approve NomeSistema`.
+### Controllo immutabilità storico — `fingerprint.mode`
+
+Il principio: i trade passati non cambiano mai, quindi se il PnL di un anno
+chiuso differisce dalla baseline il file è stato rigenerato da una
+configurazione diversa (timeframe/workspace/size). Questo controllo si governa
+da `config/settings.yaml → fingerprint.mode`:
+
+| Modalità | Comportamento |
+|----------|---------------|
+| **`off`** *(default)* | Controllo disattivato: nessun confronto, nessun avviso, nessuna esclusione. **Usa questa modalità quando ruoti i sistemi o cambi le size** — il PnL storico in $ cambia legittimamente e non deve bloccare i pesi. |
+| `warn` | Il sistema con storico mutato **resta nel calcolo**; la mutazione appare come avviso nel report e la baseline si auto-aggiorna. |
+| `block` | Il sistema con storico mutato va in **quarantena** (escluso) finché non lo ri-approvi. Era il comportamento storico, utile per intercettare export dal chart sbagliato (es. `ShortCoverMNQ` da 60-min: PnL storico +11k → −54k). |
+
+> Tieni le virgolette nel valore (`mode: "off"`): senza, YAML interpreta
+> `off`/`on`/`yes`/`no` come booleani.
+
+Se in futuro riattivi `warn` o `block` dopo una rotazione, **ricostruisci prima
+la baseline** così la nuova configurazione diventa il riferimento:
+
+```bash
+python src/verify.py [--local DIR] --approve            # tutti i sistemi
+python src/verify.py [--local DIR] --approve NomeSistema # un solo sistema
+```
 
 ---
 
