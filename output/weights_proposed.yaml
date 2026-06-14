@@ -1,30 +1,14 @@
 # Pesi consigliati per famiglia — Portfolio Allocator
-# Generato: 2026-06-14T13:00:48.432580+00:00
+# Generato: 2026-06-14T15:42:15.192114+00:00
 # NB: pesi di rischio (inverse-volatility), non giudizi di qualità.
 weights:
-  BreakOutyDaily-LULU: 2.00
   ShortCoverM2K: 2.00
-  ShortCoverMES: 1.50
-  BiasIntraweek: 1.00
+  BreakOutyDaily-LULU: 2.00
+  ShortCoverMES: 2.00
   BRKPrezziAlt: 0.50
-  ISSCrypto: 0.50
+  BiasIntraweek: 0.50
   BreakOutDaily: 0.50
   MYMSushi: 0.50
+  ISSCrypto: 0.50
+  ShortCoverMNQ: 0.50
   ZScore: 0.50
-quarantined:
-  BiasIntraweekAVGO: "STORICO MUTATO rispetto alla baseline — file rigenerato da configurazione diversa (timeframe/workspace/size)? Dettaglio: 2021: PnL +1,269$→+505$, trade 11→11; 2022: PnL +25$→+13$, trade 17→17; 2023: PnL +2,519$→+1,009$, trade 13→13; 2024: PnL +3,380$→+1,340$, trade 15→15"
-  BiasIntraweekBA: "STORICO MUTATO rispetto alla baseline — file rigenerato da configurazione diversa (timeframe/workspace/size)? Dettaglio: 2021: PnL +514$→+429$, trade 9→9; 2022: PnL +773$→+592$, trade 10→10; 2023: PnL +638$→+532$, trade 9→9; 2024: PnL -504$→-438$, trade 13→13"
-  BiasIntraweekCOST: "STORICO MUTATO rispetto alla baseline — file rigenerato da configurazione diversa (timeframe/workspace/size)? Dettaglio: 2021: PnL +1,302$→+487$, trade 6→6; 2022: PnL +441$→+152$, trade 14→14; 2023: PnL +556$→+221$, trade 9→9; 2024: PnL +2,918$→+1,050$, trade 11→11"
-  BiasIntraweekMETA: "STORICO MUTATO rispetto alla baseline — file rigenerato da configurazione diversa (timeframe/workspace/size)? Dettaglio: 2022: PnL -3,395$→-3,497$, trade 30→30"
-  BiasIntraweekNVDA: "STORICO MUTATO rispetto alla baseline — file rigenerato da configurazione diversa (timeframe/workspace/size)? Dettaglio: 2021: PnL +3,990$→+1,350$, trade 7→7; 2022: PnL -3,440$→-1,428$, trade 15→15; 2023: PnL +10,708$→+3,050$, trade 5→5; 2024: PnL +6,009$→+2,375$, trade 9→9"
-  BiasIntraweekORCL: "STORICO MUTATO rispetto alla baseline — file rigenerato da configurazione diversa (timeframe/workspace/size)? Dettaglio: 2021: PnL +1,890$→+742$, trade 17→17; 2022: PnL -58$→-35$, trade 25→25; 2023: PnL +1,304$→+520$, trade 18→18; 2024: PnL +2,954$→+1,130$, trade 24→24"
-  BiasIntraweekVZ: "STORICO MUTATO rispetto alla baseline — file rigenerato da configurazione diversa (timeframe/workspace/size)? Dettaglio: 2021: PnL -30$→-11$, trade 17→17; 2022: PnL -1,007$→-399$, trade 18→18; 2023: PnL +566$→+227$, trade 17→17; 2024: PnL +338$→+136$, trade 17→17"
-  BiasIntraweekXOM: "STORICO MUTATO rispetto alla baseline — file rigenerato da configurazione diversa (timeframe/workspace/size)? Dettaglio: 2021: PnL +3,032$→+1,203$, trade 8→8; 2022: PnL +2,826$→+1,126$, trade 9→9; 2023: PnL +385$→+152$, trade 10→10; 2024: PnL -26$→-15$, trade 12→12"
-  BreakOutDaily-AMD: "STORICO MUTATO rispetto alla baseline — file rigenerato da configurazione diversa (timeframe/workspace/size)? Dettaglio: 2020: PnL +1,460$→+730$, trade 3→3; 2021: PnL +1,442$→+704$, trade 6→6; 2022: PnL -2,628$→-1,297$, trade 5→5; 2023: PnL +732$→+377$, trade 6→6"
-  BreakOutDaily-BIDU: "STORICO MUTATO rispetto alla baseline — file rigenerato da configurazione diversa (timeframe/workspace/size)? Dettaglio: 2020: PnL +743$→+360$, trade 2→2; 2021: PnL +2,110$→+1,062$, trade 4→4; 2022: PnL -1,574$→-787$, trade 3→3; 2023: PnL +412$→+206$, trade 4→4"
-  BreakOutDaily-GOOG: "STORICO MUTATO rispetto alla baseline — file rigenerato da configurazione diversa (timeframe/workspace/size)? Dettaglio: 2020: PnL +746$→+373$, trade 2→2; 2021: PnL +1,876$→+926$, trade 3→3; 2022: PnL -1,186$→-578$, trade 4→4; 2023: PnL +158$→+76$, trade 5→5"
-  BreakOutDaily-SHOP: "STORICO MUTATO rispetto alla baseline — file rigenerato da configurazione diversa (timeframe/workspace/size)? Dettaglio: 2020: PnL +758$→+372$, trade 2→2; 2021: PnL +210$→+114$, trade 6→6; 2022: PnL -1,065$→-531$, trade 2→2; 2023: PnL +995$→+497$, trade 4→4"
-  BreakOutDaily-W: "STORICO MUTATO rispetto alla baseline — file rigenerato da configurazione diversa (timeframe/workspace/size)? Dettaglio: 2020: PnL +790$→+381$, trade 4→4; 2021: PnL -612$→-318$, trade 5→5; 2023: PnL +2,353$→+1,177$, trade 3→3; 2024: PnL -1,186$→-587$, trade 6→6"
-  BreakOutDaily-WYNN: "STORICO MUTATO rispetto alla baseline — file rigenerato da configurazione diversa (timeframe/workspace/size)? Dettaglio: 2020: PnL -1,131$→-555$, trade 3→3; 2021: PnL +1,536$→+766$, trade 4→4; 2022: PnL -1,013$→-507$, trade 2→2; 2023: PnL +1,821$→+911$, trade 3→3"
-  ShortCoverMNQ: "STORICO MUTATO rispetto alla baseline — file rigenerato da configurazione diversa (timeframe/workspace/size)? Dettaglio: 2020: PnL -7,703$→+617$, trade 38→38; 2021: PnL -1,837$→+3,368$, trade 31→31; 2022: PnL -4,822$→+10,498$, trade 54→53; 2023: PnL -8,007$→-3,250$, trade 37→38"
-  ZScoreNFLX: "STORICO MUTATO rispetto alla baseline — file rigenerato da configurazione diversa (timeframe/workspace/size)? Dettaglio: 2020: PnL +188$→+188$, trade 14→14; 2022: PnL +821$→+881$, trade 4→4; 2023: PnL +481$→+448$, trade 10→10"
