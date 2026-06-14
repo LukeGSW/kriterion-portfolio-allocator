@@ -48,13 +48,21 @@ def check_fingerprints(
     systems: list[ParsedSystem],
     baseline_path: Path,
     current_year: int | None = None,
+    update_mutated: bool = False,
 ) -> tuple[list, list, dict]:
     """
     Confronta i sistemi con la baseline e la aggiorna.
 
+    Args:
+        update_mutated: se True (modalità 'warn'), la baseline di un sistema
+            mutato viene AGGIORNATA al valore corrente — la mutazione viene
+            segnalata una volta e poi accettata. Se False (modalità 'block',
+            default storico), la baseline mutata NON viene toccata, così il
+            sistema resta in quarantena finché non lo ri-approvi con verify.py.
+
     Returns:
         (mutations, new_systems, updated_baseline)
-        mutations:   list[(system_name, reason)] — storico mutato → quarantena
+        mutations:   list[(system_name, reason)] — storico mutato
         new_systems: list[system_name] — baseline creata ora (informativo)
     """
     current_year = current_year or datetime.now(timezone.utc).year
@@ -98,9 +106,10 @@ def check_fingerprints(
                       "configurazione diversa (timeframe/workspace/size)? Dettaglio: "
                       + "; ".join(diffs[:4]))
             mutations.append((name, reason))
-            # NON aggiorna la baseline: resta quella buona finché non
-            # viene ripristinato il file corretto (o ri-approvata con verify.py)
-            updated[name] = base
+            # block: NON aggiorna la baseline (resta quella buona finché non
+            #        viene ripristinato il file o ri-approvato con verify.py).
+            # warn:  aggiorna alla baseline corrente (mutazione accettata).
+            updated[name] = fp if update_mutated else base
         else:
             # storico coerente → aggiorna con anno corrente che cresce
             updated[name] = fp
