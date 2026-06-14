@@ -102,22 +102,47 @@ def main() -> int:
         logger.error("Nessun sistema supera i sanity check: pipeline interrotta.")
         return 1
 
-    # ── 3b. Immutabilità storico: i trade passati non cambiano mai.
-    # Sistemi con storico mutato → quarantena (file rigenerato da
-    # configurazione diversa: timeframe/workspace/size errati).
-    fp_path = OUTPUT_DIR / 'fingerprints.json'
-    mutations, new_systems, updated_fp = check_fingerprints(sanity.ok, fp_path)
-    if mutations:
-        mutated_names = {n for n, _ in mutations}
-        sanity.quarantined.extend(mutations)
-        sanity.ok = [ps for ps in sanity.ok if ps.system_name not in mutated_names]
-        for n, r in mutations:
-            logger.warning(f"QUARANTENA {n}: {r}")
-    for n in new_systems:
-        sanity.warnings.append(
-            (n, "primo censimento: baseline immutabilità creata in questa run"))
-    OUTPUT_DIR.mkdir(exist_ok=True)
-    save_fingerprints(fp_path, updated_fp)
+    # ── 3b. Immutabilità storico (configurabile da settings.yaml → fingerprint.mode)
+    # I trade passati non cambiano mai... a meno che TU non ruoti i sistemi o
+    # cambi le size: in quel caso il PnL storico in $ muta legittimamente.
+    #   off   → controllo disattivato (nessun confronto / avviso / esclusione)
+    #   warn  → storico mutato = solo avviso, sistema INCLUSO, baseline aggiornata
+    #   block → storico mutato = quarantena (sistema escluso) [comportamento storico]
+    fp_cfg = settings.get('fingerprint', {}) or {}
+    fp_mode = str(fp_cfg.get('mode', 'off')).strip().lower()
+    # YAML interpreta off/no/false e on/yes/true come booleani: rinormalizziamo.
+    if fp_mode in ('false', 'no', 'none', ''):
+        fp_mode = 'off'
+    elif fp_mode in ('true', 'yes'):
+        fp_mode = 'block'
+    if fp_mode not in ('off', 'warn', 'block'):
+        logger.warning(f"fingerprint.mode='{fp_mode}' non valido: uso 'off'.")
+        fp_mode = 'off'
+
+    if fp_mode == 'off':
+        logger.info("Immutabilità storico DISATTIVATA (fingerprint.mode=off): "
+                    "nessun controllo di mutazione, tutti i sistemi passano.")
+    else:
+        fp_path = OUTPUT_DIR / 'fingerprints.json'
+        mutations, new_systems, updated_fp = check_fingerprints(
+            sanity.ok, fp_path, update_mutated=(fp_mode == 'warn'))
+        if mutations:
+            if fp_mode == 'block':
+                mutated_names = {n for n, _ in mutations}
+                sanity.quarantined.extend(mutations)
+                sanity.ok = [ps for ps in sanity.ok if ps.system_name not in mutated_names]
+                for n, r in mutations:
+                    logger.warning(f"QUARANTENA {n}: {r}")
+            else:  # warn
+                for n, r in mutations:
+                    sanity.warnings.append((n, "storico mutato (incluso): " + r))
+                    logger.warning(f"STORICO MUTATO {n} (incluso): {r}")
+        for n in new_systems:
+            sanity.warnings.append(
+                (n, "primo censimento: baseline immutabilità creata in questa run"))
+        OUTPUT_DIR.mkdir(exist_ok=True)
+        save_fingerprints(fp_path, updated_fp)
+
     if not sanity.ok:
         logger.error("Tutti i sistemi in quarantena: pipeline interrotta.")
         return 1
